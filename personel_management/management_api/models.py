@@ -15,7 +15,7 @@ class Military(models.Model):
     surname = models.CharField(max_length=200)
     rank = models.CharField(max_length=50)
     date_of_birth = models.DateField()
-    phone_number = models.IntegerField(max_length=10)
+    phone_number = models.IntegerField()
     email = models.EmailField(unique=True)
     departement = models.CharField(max_length=50)
     registration_number = models.IntegerField()
