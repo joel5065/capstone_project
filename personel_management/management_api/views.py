@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import generics, filters
+from django_filters import rest_framework as filter
 from .serializers import MilitarySerializer, DiplomaSerializer, ChildrenSerializer
 from .models import Military, Diploma, Children
 # Create your views here.
@@ -7,17 +9,52 @@ from .models import Military, Diploma, Children
 def home(request):
     return render(request, 'management_api/home.html')
   
-class MilitaryViewSet(viewsets.ModelViewSet):
+class MilitaryFilter(filter.FilterSet):
+    title = filter.CharFilter(lookup_expr='icontains')
+    author = filter.CharFilter(lookup_expr='icontains')
+    registration = filter.NumberFilter(field_name='registration_number', lookup_expr='icontains')
+    
+
+    class Meta:
+        model = Military
+        fields = ['name', 'rank', 'registration_number']
+
+class MilitaryListView(generics.ListAPIView):
     queryset = Military.objects.all()
     serializer_class = MilitarySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [filter.DjangoFilterBackend] 
+    filterset_class = MilitaryFilter
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'rank', 'registration_number']
 
-class DiplomaViewSet(viewsets.ModelViewSet):
-    queryset = Diploma.objects.all()
-    serializer_class = DiplomaSerializer
-    permission_classes = [permissions.IsAuthenticated]  
+class MilitaryDetailView(generics.RetrieveAPIView):
+    queryset = Military.objects.all()
+    serializer_class = MilitarySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['rank', 'name', 'function']
 
-class ChildrenViewSet(viewsets.ModelViewSet):
-    queryset = Children.objects.all()
-    serializer_class = ChildrenSerializer
-    permission_classes = [permissions.IsAuthenticated]
+class MilitaryCreateView(generics.CreateAPIView):
+    queryset = Military.objects.all()
+    serializer_class = MilitarySerializer
+    permission_classes = [IsAuthenticated]
+
+   
+    def perform_create(self, serializer):
+        # On peut implementer des modifs sur la vue ici
+        serializer.save()
+
+class MilitaryUpdateView(generics.UpdateAPIView):
+    queryset = Military.objects.all()
+    serializer_class = MilitarySerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_update(self, serializer):
+        # On peut implementer des modifs sur la vue ici
+        serializer.save()
+
+class MilitaryDeleteView(generics.DestroyAPIView):
+    queryset = Military.objects.all()
+    serializer_class = MilitarySerializer
+    permission_classes = [IsAuthenticated]
