@@ -1,6 +1,6 @@
 from .models import Military, Diploma, Children
 from  rest_framework import serializers
-    
+
 class MilitarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Military

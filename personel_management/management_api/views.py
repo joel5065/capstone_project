@@ -1,14 +1,27 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import generics, filters
 from django_filters import rest_framework as filter
 from .serializers import MilitarySerializer, DiplomaSerializer, ChildrenSerializer
 from .models import Military, Diploma, Children
+from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirect to login after successful registration
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'management_api/register.html', {'form': form})
 
+# Home page 
+@login_required
 def home(request):
     return render(request, 'management_api/home.html')
-  
+
 class MilitaryFilter(filter.FilterSet):
     title = filter.CharFilter(lookup_expr='icontains')
     author = filter.CharFilter(lookup_expr='icontains')
