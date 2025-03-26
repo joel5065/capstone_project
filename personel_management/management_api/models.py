@@ -3,29 +3,40 @@ from django.db import models
 # Create your models here.
 class Military(models.Model):
     SEX_CHOICES = [
-        ('M', 'Masculin'),
-        ('F', 'Feminin'),
+        ('M', 'Male'),
+        ('F', 'Female'),
     ]
     IS_MARRIED_CHOICES= [
         ('M', 'MARIED'),
         ('S', 'SINGLE'),
         ('D', 'DIVORCED'),
     ]
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=200)
-    rank = models.CharField(max_length=50)
+    RANK_CHOICES = [
+        ('PVT', 'Private'),
+        ('CPL', 'Corporal'),
+        ('SGT', 'Sergeant'),
+        ('ADT', 'Adjudant'),
+        ('LT', 'Lieutenant'),
+        ('CPT','Captain'),
+        ('MAJ', 'Major'),
+        ('COL', 'Colonel'),
+        ('GEN', 'General'),
+    ]
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=200)
+    rank = models.CharField(max_length=3, choices=RANK_CHOICES)
     date_of_birth = models.DateField()
     phone_number = models.IntegerField()
     email = models.EmailField(unique=True)
-    departement = models.CharField(max_length=50)
-    registration_number = models.IntegerField()
-    profile_picture = models.ImageField(upload_to='pofile_pictures/', blank=True, null=True)
+    current_unit = models.CharField(max_length=100)
+    service_number = models.CharField(max_length=100, unique=True)
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     is_maried = models.CharField(max_length=1, choices=IS_MARRIED_CHOICES)
     graduation_school = models.CharField(max_length=100)
+    address = models.TextField()
 
     def __str__(self):
-        return f"{self.rank} {self.name} - {self.departement}"
+        return f"{self.rank} {self.first_name} - {self.current_unit}"
     
 
 class Diploma(models.Model):
@@ -34,23 +45,28 @@ class Diploma(models.Model):
         ('C', 'Civilian'),
     ]
 
-    owner = models.ForeignKey(Military, on_delete=models.CASCADE)
+    military = models.ForeignKey(Military, on_delete=models.CASCADE, related_name='diplomas')
 
-    diploma_title = models.CharField(max_length=100)
+    fiel_of_study = models.CharField(max_length=100)
+    degree = models.CharField(max_length=100)
+    diploma_number = models.CharField(max_length=50, unique=True)
     type_of_diploma = models.CharField(max_length=1, choices=CATEGORY_DIPLOMA)
-    date_of_production = models.DateField()
-    school_of_graduation = models.CharField(max_length=100)
+    graduation_date = models.DateField()
+    institution = models.CharField(max_length=100)
+
 
     def __str__(self):
-        return f'{self.diploma_title}'
+        return f"{self.degree} in {self.fiel_of_study} - {self.institution}"
     
 class Children(models.Model):
 
-    parent = models.ForeignKey(Military, on_delete=models.CASCADE)
+    military = models.ForeignKey(Military, on_delete=models.CASCADE, related_name='children')
 
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
+    gender = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')], blank=True)
+    grade = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return f'{self.name} of {self.parent}'
+        return f'{self.first_name} {self.last_name}'

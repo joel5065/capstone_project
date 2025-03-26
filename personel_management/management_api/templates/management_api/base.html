@@ -1,34 +1,51 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ABIDJAN AIR FORCE BASE- MILITARY MANAGEMENT APP {% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %}ABIDJAN AIR FORCE BASE - PERSONNEL MANAGEMENT APP {% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome (icônes) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'register' %}">Register</a></li>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}"> Personnel Management App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'military-list' %}">👨‍💼 Military</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}"> Register</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{% url 'logout' %}">🚪Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">🔑 Login</a></li>
+                {% endif %}
             </ul>
-        </nav>
-    </header>
-
-    <div class="content">
-        {% block content %}
-        <!-- Page-specific content goes here -->
-        {% endblock %}
+        </div>
     </div>
+</nav>
 
-    <footer>
-        <p>&copy; 2024 Air Force Base APP</p>
-    </footer>
+<!-- Contenu principal -->
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
 
-    <script src="{% static 'js/script.js' %}"></script>
+<!-- Pied de page -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p>© 2025 Personnel Management App - All rights reserved</p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
