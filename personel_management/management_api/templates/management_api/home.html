@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Military Personnel Management App</title>
+    <title>Military Personnel Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .card {
@@ -14,6 +14,12 @@
         }
         .api-section {
             margin-top: 2rem;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -99,6 +105,48 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="filter-section">
+                <h3>Filtering and Search Options</h3>
+                <p>All endpoints support the following query parameters:</p>
+                <ul>
+                    <li><code>search</code>: Search across specified fields</li>
+                    <li><code>ordering</code>: Order results by specified fields</li>
+                </ul>
+
+                <h4>Military Personnel Filters</h4>
+                <ul>
+                    <li><code>rank</code>: Filter by military rank</li>
+                    <li><code>current_unit</code>: Filter by current unit</li>
+                    <li><code>first_name</code>: Filter by first name</li>
+                    <li><code>last_name</code>: Filter by last name</li>
+                    <li><code>date_of_birth</code>: Filter by birth date</li>
+                    
+                    
+                </ul>
+
+                <h4>Children Filters</h4>
+                <ul>
+                    <li><code>gender</code>: Filter by gender (M/F)</li>
+                    <li><code>school</code>: Filter by school</li>
+                    <li><code>grade</code>: Filter by grade</li>
+                    <li><code>date_of_birth</code>: Filter by birth date</li>
+                    
+                </ul>
+
+                <h4>Diploma Filters</h4>
+                <ul>
+                    <li><code>institution</code>: Filter by institution</li>
+                    <li><code>degree</code>: Filter by degree</li>
+                    <li><code>field_of_study</code>: Filter by field of study</li>
+                    <li><code>graduation_date</code>: Filter by graduation date</li>
+                </ul>
+
+                <h4>Example Usage</h4>
+                <pre><code>/api/military/?rank=CPT&date_of_birth=1990-01-01&ordering=-service_number
+/api/children/?gender=M&school=High School&search=John
+/api/diplomas/?institution=University&ordering=-graduation_date</code></pre>
             </div>
         </div>
     </div>
